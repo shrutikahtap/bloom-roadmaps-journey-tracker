@@ -1,11 +1,14 @@
 import os
 import pathlib
 import requests
+from dotenv import load_dotenv
 import streamlit as st
 import streamlit.components.v1 as components
 from garden import build
 
-API = os.getenv("API_URL", "http://localhost:8000")
+load_dotenv()
+
+API = os.getenv("API_URL")
 SERVICE_KEY = os.getenv("SERVICE_KEY", "")
 STATUS = {"not_started": "Not started", "in_progress": "In progress", "done": "Done"}
 FLOWER = {"done": "🌸", "in_progress": "🌱", "not_started": "▫️"}

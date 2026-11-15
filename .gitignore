@@ -4,3 +4,4 @@ bloom.db
 __pycache__/
 .venv/
 venv/
+bloom/

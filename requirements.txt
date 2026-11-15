@@ -3,6 +3,7 @@ uvicorn[standard]
 sqlalchemy>=2.0
 psycopg2-binary
 PyJWT
+python-dotenv
 pyyaml
 streamlit[auth]>=1.42
 requests
