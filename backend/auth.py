@@ -9,7 +9,7 @@ from .db import get_db
 from .models import User
 
 SECRET = os.getenv("JWT_SECRET", "dev-only-secret")
-SERVICE_KEY = os.getenv("SERVICE_KEY", "")
+SERVICE_KEY = os.getenv("SERVICE_KEY", "124814f0adf6095eaf26458769e79c0db6939f44b7839843a84b0afd871f344d")
 bearer = HTTPBearer()
 
 
