@@ -1,0 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Caveat:wght@600&family=Nunito:wght@400;600&display=swap');
+html, body, [class*="css"] { font-family: 'Nunito', sans-serif; }
+h1, h2, h3 { font-family: 'Fraunces', serif !important; color: #5B4448; letter-spacing: -0.01em; }
+.hand { font-family: 'Caveat', cursive; font-size: 1.5rem; color: #B5657D; }
+.garden { font-size: 1.6rem; line-height: 2.1rem; padding: .6rem 1rem; border-radius: 18px 18px 6px 6px;
+  background: linear-gradient(#FFF8F0 70%, #DDE8D0 70%); border: 1px dashed #9CAF88; }
+[data-testid="stExpander"] { border: 1px solid #EBC8D0; border-radius: 14px; background: #FFFCF8; }
+[data-testid="stSidebar"] { border-right: 2px dotted #EBC8D0; }
+.stButton > button { border-radius: 999px; border: 1px solid #D98BA0; }
