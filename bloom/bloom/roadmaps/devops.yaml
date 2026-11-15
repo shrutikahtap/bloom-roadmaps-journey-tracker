@@ -1,0 +1,116 @@
+slug: devops
+title: DevOps Engineer
+emoji: "🌿"
+description: From your first shell command to running production systems you can sleep through.
+sections:
+  - title: Linux and the command line
+    summary: Almost every server you will touch runs Linux. Get comfortable here first.
+    topics:
+      - title: Navigating and managing files
+        description: Move around the filesystem, read and edit files, pipe commands together, and search with grep, find, and awk.
+        resources: [["Linux Journey", "https://linuxjourney.com/"]]
+      - title: Users, permissions and processes
+        description: Understand file modes, sudo, users and groups, ps/top, signals, and systemd services.
+        resources: [["Linux Journey: permissions", "https://linuxjourney.com/lesson/file-permissions"]]
+      - title: Shell scripting with Bash
+        description: Write scripts with variables, conditionals, loops, functions, exit codes, and error handling (set -euo pipefail). Automate one chore you actually do.
+        resources: [["Bash reference manual", "https://www.gnu.org/software/bash/manual/"]]
+      - title: SSH and remote work
+        description: Connect with key-based SSH, configure ~/.ssh/config, copy files with scp/rsync, and use tmux for long-running sessions.
+        resources: [["Linux Journey: SSH", "https://linuxjourney.com/"]]
+  - title: Networking and security basics
+    summary: Most outages are networking problems in disguise.
+    topics:
+      - title: How the web works
+        description: Follow a request through DNS, TCP, TLS, and HTTP. Know status codes, headers, and how to debug with curl and dig.
+        resources: [["MDN: HTTP overview", "https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview"], ["How DNS works", "https://howdns.works/"]]
+      - title: Ports, firewalls and load balancers
+        description: Learn IPs, subnets, NAT, security groups, reverse proxies, and what a load balancer does. Set up Nginx as a reverse proxy.
+        resources: [["Nginx beginner's guide", "https://nginx.org/en/docs/beginners_guide.html"]]
+      - title: TLS, keys and secrets
+        description: Understand certificates, public/private keys, and Let's Encrypt. Learn why secrets never belong in git and how vaults and env vars fit in.
+        resources: [["Cloudflare: what is SSL", "https://www.cloudflare.com/learning/ssl/what-is-ssl/"]]
+  - title: Git and collaboration
+    summary: Version control is the backbone of every pipeline.
+    topics:
+      - title: Git fundamentals
+        description: Commit, diff, log, stash, and undo mistakes safely with reset and revert.
+        resources: [["Pro Git book", "https://git-scm.com/book/en/v2"]]
+      - title: Branching and merging
+        description: Practice branching strategies (trunk-based vs. Git flow), resolve merge conflicts, and use rebase carefully.
+        resources: [["Learn Git Branching", "https://learngitbranching.js.org/"]]
+      - title: Pull requests and code review
+        description: Write small, reviewable PRs, use protected branches, and add review checklists and CODEOWNERS.
+        resources: [["GitHub: pull requests", "https://docs.github.com/en/pull-requests"]]
+  - title: Containers
+    summary: Package an app once and run it anywhere.
+    topics:
+      - title: Docker basics
+        description: Understand images vs. containers, run, exec, logs, volumes, and port mapping. Containerise a small web app.
+        resources: [["Docker: get started", "https://docs.docker.com/get-started/"]]
+      - title: Writing good Dockerfiles
+        description: Use layer caching, multi-stage builds, small base images, non-root users, and a .dockerignore. Scan images for vulnerabilities.
+        resources: [["Dockerfile best practices", "https://docs.docker.com/build/building/best-practices/"]]
+      - title: Docker Compose
+        description: Run an app, database, and cache together with networks, volumes, health checks, and env files.
+        resources: [["Docker Compose docs", "https://docs.docker.com/compose/"]]
+      - title: Registries
+        description: Push and pull images from Docker Hub or GHCR, tag with versions and commit SHAs, and avoid relying on the latest tag.
+        resources: [["GitHub Container Registry", "https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry"]]
+  - title: CI/CD
+    summary: Make every change build, test, and ship the same way.
+    topics:
+      - title: Continuous integration concepts
+        description: Understand build, test, lint, and artifact stages, fast feedback, and why flaky tests are expensive.
+        resources: [["Martin Fowler: CI", "https://martinfowler.com/articles/continuousIntegration.html"]]
+      - title: GitHub Actions
+        description: Write workflows with triggers, jobs, matrices, caching, secrets, and reusable workflows. Build and push a Docker image on every merge.
+        resources: [["GitHub Actions docs", "https://docs.github.com/en/actions"]]
+      - title: Deployment strategies
+        description: Compare rolling, blue-green, and canary deploys, and know how to roll back. Add feature flags to separate deploy from release.
+        resources: [["Martin Fowler: BlueGreenDeployment", "https://martinfowler.com/bliki/BlueGreenDeployment.html"]]
+  - title: Cloud and infrastructure as code
+    summary: Servers should be reproducible, not hand-crafted.
+    topics:
+      - title: Cloud fundamentals
+        description: Learn compute, storage, networking, and IAM on one provider (AWS, GCP, or Azure). Launch a VM, a bucket, and a managed database, then tear them down.
+        resources: [["AWS Skill Builder", "https://skillbuilder.aws/"]]
+      - title: Terraform
+        description: Write providers, resources, variables, outputs, and modules. Use remote state with locking and review plans before applying.
+        resources: [["Terraform tutorials", "https://developer.hashicorp.com/terraform/tutorials"]]
+      - title: Configuration management with Ansible
+        description: Write idempotent playbooks and roles to configure servers over SSH, and keep inventories tidy.
+        resources: [["Ansible docs", "https://docs.ansible.com/"]]
+  - title: Kubernetes
+    summary: Run containers at scale with self-healing and declarative config.
+    topics:
+      - title: Architecture and core concepts
+        description: Understand the control plane, nodes, pods, and the reconcile loop. Run a local cluster with kind or minikube.
+        resources: [["Kubernetes basics tutorial", "https://kubernetes.io/docs/tutorials/kubernetes-basics/"]]
+      - title: Deployments, services and ingress
+        description: Use Deployments, ReplicaSets, Services, and Ingress. Configure probes and resource requests and limits.
+        resources: [["Kubernetes workloads", "https://kubernetes.io/docs/concepts/workloads/"]]
+      - title: ConfigMaps, Secrets and storage
+        description: Inject config and secrets safely, and use PersistentVolumes and StatefulSets for stateful apps.
+        resources: [["Kubernetes configuration", "https://kubernetes.io/docs/concepts/configuration/"]]
+      - title: Helm and GitOps
+        description: Package apps as Helm charts, then use Argo CD or Flux so Git is the source of truth for the cluster.
+        resources: [["Helm docs", "https://helm.sh/docs/"], ["Argo CD docs", "https://argo-cd.readthedocs.io/"]]
+  - title: Observability and reliability
+    summary: You cannot fix what you cannot see.
+    topics:
+      - title: Metrics with Prometheus and Grafana
+        description: Instrument an app, scrape metrics, write PromQL queries, and build a dashboard for the four golden signals.
+        resources: [["Prometheus overview", "https://prometheus.io/docs/introduction/overview/"]]
+      - title: Logging and tracing
+        description: Emit structured logs, centralise them (Loki or ELK), and learn distributed tracing with OpenTelemetry.
+        resources: [["OpenTelemetry docs", "https://opentelemetry.io/docs/"]]
+      - title: Alerting, SLOs and incident response
+        description: Define SLIs and SLOs, alert on symptoms rather than causes, write runbooks, and practise blameless postmortems.
+        resources: [["Google SRE book", "https://sre.google/sre-book/table-of-contents/"]]
+  - title: Capstone
+    summary: Prove it to yourself with one end-to-end project.
+    topics:
+      - title: Ship a full pipeline
+        description: Take a small web app and add a Dockerfile, a CI pipeline, Terraform-provisioned infrastructure, a Kubernetes deployment, and a Grafana dashboard. Document it in a README with an architecture diagram.
+        resources: [["The Twelve-Factor App", "https://12factor.net/"]]

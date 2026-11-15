@@ -2,8 +2,10 @@ import os
 import pathlib
 import requests
 import streamlit as st
+import streamlit.components.v1 as components
+from garden import build
 
-API = os.getenv("API_URL", "http://localhost:8051")
+API = os.getenv("API_URL", "http://localhost:8000")
 SERVICE_KEY = os.getenv("SERVICE_KEY", "")
 STATUS = {"not_started": "Not started", "in_progress": "In progress", "done": "Done"}
 FLOWER = {"done": "🌸", "in_progress": "🌱", "not_started": "▫️"}
@@ -50,34 +52,61 @@ def get_api_token():
     st.session_state.update(token=r.json()["token"], name=r.json()["name"])
 
 
+def save(tid, skey, nkey, stopkey, n, advance):
+    status = st.session_state[skey]
+    call("PUT", f"/progress/{tid}", json={"status": status, "notes": st.session_state[nkey]})
+    st.toast("A new flower bloomed 🌸" if status == "done" else "Saved 🌷")
+    if advance:
+        st.session_state[stopkey] = min(st.session_state[stopkey] + 1, n - 1)
+
+
+def step(stopkey, delta, n):
+    st.session_state[stopkey] = min(max(st.session_state[stopkey] + delta, 0), n - 1)
+
+
 def roadmap_screen(slug):
     data = call("GET", f"/roadmaps/{slug}").json()
-    topics = [t for s in data["sections"] for t in s["topics"]]
-    done = sum(t["status"] == "done" for t in topics)
+    flat = [t for s in data["sections"] for t in s["topics"]]
+    n = len(flat)
+    done = sum(t["status"] == "done" for t in flat)
+    growing = sum(t["status"] == "in_progress" for t in flat)
+    stopkey = f"stop_{slug}"
+    if stopkey not in st.session_state:  # start the walk at the first unfinished stop
+        st.session_state[stopkey] = next((i for i, t in enumerate(flat) if t["status"] != "done"), n - 1)
+    cur = st.session_state[stopkey]
+
     st.markdown(f"<div class='hand'>{data['description']}</div>", unsafe_allow_html=True)
     st.title(f"{data['emoji']} {data['title']}")
-    st.progress(done / max(len(topics), 1), text=f"{done} of {len(topics)} topics complete")
-    st.markdown("<div class='garden'>" + "".join(FLOWER[t["status"]] for t in topics) + "</div>",
-                unsafe_allow_html=True)
-    st.caption("🌸 done   🌱 in progress   ▫️ not started")
+    st.markdown(f"<div class='chips'><span>🌸 {done} bloomed</span><span>🌱 {growing} growing</span>"
+                f"<span>🫘 {n - done - growing} seeds waiting</span></div>", unsafe_allow_html=True)
+    st.progress(done / max(n, 1))
+    if done == n:
+        st.success("Your garden is in full bloom, and the cottage lights are on. 🌸")
 
-    for s in data["sections"]:
-        sd = sum(t["status"] == "done" for t in s["topics"])
-        st.header(s["title"])
-        st.write(f"{s['summary']}  ({sd}/{len(s['topics'])} done)")
-        for t in s["topics"]:
-            with st.expander(f"{FLOWER[t['status']]}  {t['title']}"):
-                st.write(t["description"])
-                for x in t["resources"]:
-                    st.markdown(f"- [{x['title']}]({x['url']})")
-                keys = list(STATUS)
-                status = st.selectbox("Status", keys, index=keys.index(t["status"]),
-                                      format_func=STATUS.get, key=f"s{t['id']}")
-                notes = st.text_area("My notes", t["notes"], key=f"n{t['id']}")
-                if st.button("Save", key=f"b{t['id']}"):
-                    call("PUT", f"/progress/{t['id']}", json={"status": status, "notes": notes})
-                    st.toast("Saved 🌷")
-                    st.rerun()
+    garden, panel = st.columns([3, 2], gap="large")
+    with garden:
+        components.html(build(data, cur), height=780, scrolling=True)
+    with panel:
+        t = flat[cur]
+        back, fwd = st.columns(2)
+        back.button("← Step back", on_click=step, args=(stopkey, -1, n), disabled=cur == 0, use_container_width=True)
+        fwd.button("Step forward →", on_click=step, args=(stopkey, 1, n), disabled=cur == n - 1, use_container_width=True)
+        with st.container(border=True):
+            st.markdown(f"<div class='hand'>stop {cur + 1} of {n}</div>", unsafe_allow_html=True)
+            st.subheader(t["title"])
+            st.write(t["description"])
+            for x in t["resources"]:
+                st.markdown(f"- [{x['title']}]({x['url']})")
+            keys = list(STATUS)
+            skey, nkey = f"s{t['id']}", f"n{t['id']}"
+            st.selectbox("Status", keys, index=keys.index(t["status"]), format_func=STATUS.get, key=skey)
+            st.text_area("My notes", t["notes"], key=nkey)
+            c1, c2 = st.columns(2)
+            c1.button("Save", on_click=save, args=(t["id"], skey, nkey, stopkey, n, False), use_container_width=True)
+            c2.button("Save & walk on 🌷", on_click=save, args=(t["id"], skey, nkey, stopkey, n, True),
+                      type="primary", use_container_width=True)
+        st.selectbox("Jump to a stop", range(n), key=stopkey,
+                     format_func=lambda i: f"{FLOWER[flat[i]['status']]} {i + 1}. {flat[i]['title']}")
 
 
 if not getattr(st.user, "is_logged_in", False):
